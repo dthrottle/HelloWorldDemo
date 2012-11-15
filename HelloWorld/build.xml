@@ -5,7 +5,9 @@
 <property name="test.src.dir" value="test" />
 <property name="compile.dir" value="WebContent/WEB-INF/classes" />
 <property name="test.reports" value="test/reports" />
+<property name="lib.dir" value="WebContent/WEB-INF/lib" />
 <mkdir dir="${compile.dir}" />
+<mkdir dir="${lib.dir}" />
 
 <path id="build.class.path">
 	<fileset dir="WebContent/WEB-INF/lib">
