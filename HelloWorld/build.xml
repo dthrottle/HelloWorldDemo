@@ -1,8 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="HelloWorldDemo" basedir="." default="test">
 
-<target name="test">
-    
+<property name="src.dir" value="src" />
+<property name="test.src.dir" value="test" />
+<property name="compile.dir" value="WebContent/WEB-INF/classes" />
+<property name="test.reports" value="test/reports" />
+
+<path id="build.class.path">
+	<fileset dir="WebContent/WEB-INF/lib">
+	    <include name="**/*.jar" />
+	</fileset>
+	<fileset dir="C:/apache/apache-tomcat-6.0.32/lib">
+	    <include name="**/*.jar" />
+	</fileset>
+</path>
+
+<target name="compile">
+    <echo>=== COMPILE ===</echo>
+    <echo>Compiling ${src.dir} files ...</echo>
+    <javac debug="on" srcdir="${src.dir}" destdir="${compile.dir}" includes="**/*">
+        <classpath refid="build.class.path" />
+    </javac>
+    <echo>Compiling ${test.src.dir} files ...</echo>
+    <javac debug="on" srcdir="${test.src.dir}" destdir="${compile.dir}" includes="**/*">
+    	<classpath refid="build.class.path" />
+    </javac>
+</target>
+
+<target name="test" depends="compile">
+    <junit fork="no" printsummary="yes" haltonfailure="no">
+         <batchtest fork="no" todir="${test.reports}" >
+	      <fileset dir="${compile.dir}">
+	          <include name="**/*Test.class" />
+	      </fileset>
+	 </batchtest>
+	 <formatter type="xml" />
+	 <classpath> 
+	     <pathelement path="${build.class.path}" />
+	     <pathelement location="${compile.dir}" />
+	 </classpath>
+    </junit>
+</target>
+
+<target name="reports" depends="test">
+	<junitreport todir="${test.reports}">
+	    <fileset dir="${test.reports}">
+	        <include name="TEST-*.xml" />
+	    </fileset>
+	    <report todir="${test.reports}" />
+    	</junitreport>
 </target>
 
 </project>
